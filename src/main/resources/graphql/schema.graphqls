@@ -1,0 +1,95 @@
+schema {
+  query: Query
+  # mutation: Mutation
+}
+
+type Query {
+  # Return all page limited by page & size
+  allCampPaged(page: Int, size: Int): [CampInfo]
+  findCampById(contentId: Int): CampInfo
+}
+
+# Object type
+type CampInfo {
+  contentId: Int!
+  addr1: String
+  addr2: String
+  trsagntNo: String
+  allar: Int
+  animalCmgCl: String
+  autoSiteCo: Int
+  bizrno: String
+  brazierCl: String
+  caravAcmpnyAt: String
+  caravSiteCo: Int
+  clturEventAt: String
+  createdtime: String
+  doNm: String
+  eqpmnLendCl: String
+  exprnProgrm: String
+  exprnProgrmAt: String
+  extshrCo: Int
+  facltDivNm: String
+  facltNm: String
+  featureNm: String
+  fireSensorCo: Int
+  firstImageUrl: String
+  frprvtSandCo: Int
+  frprvtWrppCo: Int
+  glampSiteCo: Int
+  gnrlSiteCo: Int
+  homepage: String
+  induty: String
+  indvdlCaravSiteCo: Int
+  insrncAt: String
+  Intro: String
+  lctCl: String
+  lineIntro: String
+  manageNmpr: Int
+  manageSttus: String
+  mangeDivNm: String
+  mapX: Float
+  mapY: Float
+  mgcDiv: String
+  modifiedtime: String
+  operDeCl: String
+  operPdCl: String
+  posblFcltyCl: String
+  posblFcltyEtc: String
+  prmisnDe: String
+  resveCl: String
+  resveUrl: String
+  sbrsCl: String
+  sbrsEtc: String
+  sigunguNm: String
+  siteBottomCl1: Int
+  siteBottomCl2: Int
+  siteBottomCl3: Int
+  siteBottomCl4: Int
+  siteBottomCl5: Int
+  siteMg1Co: Int
+  siteMg1Vrticl: Int
+  siteMg1Width: Int
+  siteMg2Co: Int
+  siteMg2Vrticl: Int
+  siteMg2Width: Int
+  siteMg3Co: Int
+  siteMg3Vrticl: Int
+  siteMg3Width: Int
+  sitedStnc: Int
+  swrmCo: Int
+  tel: String
+  themaEnvrnCl: String
+  toiletCo: Int
+  trlerAcmpnyAt: String
+  wtrplCo: Int
+  zipcode: String
+  hvofBgnde: String
+  hvofEnddle: String
+  direction: String
+  tooltip: String
+  glampInnerFclty: String
+  caravInnerFclty: String
+  clturEvent: String
+  tourEraCl: String
+}

@@ -1,0 +1,53 @@
+{
+    facltNm(야영장명)
+    한줄소개(lineIntro)
+    테마환경(themaEnvrnCl)
+    {
+        대표이미지(firstImageUrl)
+        {
+            주소(addr1 + addr2)
+            문의처(tel)
+            캠핑장 환경(lctCl + / facltDivNm)
+            캠핑장 유형(gnrlSiteCo + autoSiteCo + caravSiteCo)
+            운영기간(operPdCl)
+            운영일(operDeCl)
+            홈페이지(homepage)
+            예약방법(resveCl + resveUrl)
+            주변이용가능시설(posblFcltyCl)
+        }
+    }
+    {
+        //캠핑장 소개
+        {
+            소개문(intro)
+            최종수정일(modifiedtime)
+        }
+        //캠핑장 시설
+        {
+            부대시설(sbrsCl)
+            기타부대시설(sbrsEtc)
+            개수대(wtrplCo)
+            화장실(toiletCo)
+            샤워장(swrmCo)
+        }
+        //기타 주요시설
+        {
+            주요시설(autoSiteCo + caravSiteCo)
+            기타정보(trlerAcmpnyAt + animalCmgCl)
+            바닥형태(단위:면)(
+                siteBottomCl1 | siteBottomCl2 | siteBottomCl3|
+                siteBottomCl4 | siteBottomCl5
+            )
+            사이트크기(siteMg1Vrticl + siteMg1Width + siteMg1Co)
+            캠핑장비대여(eqpmnLendCl)
+            화로대(brazierCl)
+        }
+        //주의사항
+        {
+            대충 정보가 다를 수 있으니 캠핑장에 미리 확인하셈
+            App에 등록된 정보는 현장상황과 다소 다를 수 있으니 
+            반려동물 동반 여부, 부가 시설물, 추가차량 등 
+            원활한 캠핑을 위해 꼭 필요한 사항은 해당 캠핑장에 미리 확인하시기 바랍니다.
+        }
+    }
+}
