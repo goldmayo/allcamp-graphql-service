@@ -84,3 +84,12 @@ CREATE TABLE `campinfo` (
 COLLATE='utf8mb4_unicode_ci'
 ENGINE=InnoDB
 ;
+
+헤더
+네비게이션
+캠핑장검색
+추천(캐로우셀)
+	감성
+	반려동물
+	볼거많은등등..
+푸터

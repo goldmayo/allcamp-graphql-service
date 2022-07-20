@@ -10,6 +10,8 @@ type Query {
   allCamps(first: Int!, after: String): CampInfoConnection
   # Return CampInfo by contentId
   findCampById(contentId: Int): CampInfo
+  #
+  campSearch(first: Int!, after: String, params: CampSearchParams): CampInfoConnection
 }
 
 # Relay Pagination type
@@ -114,3 +116,92 @@ type CampInfo {
   clturEvent: String
   tourEraCl: String
 }
+
+input CampSearchParams {
+  facltNm: String
+  doNm: String
+  sigunguNm: String
+  themaEnvrnCl: String
+  facltDivNm: String
+  lctCl: String
+  # facility: FacilityClass
+  induty: String
+  # floor: floorMaterial
+  siteBottomCl1: String #잔디
+  siteBottomCl2: String #파쇄석
+  siteBottomCl3: String #테크
+  siteBottomCl4: String #자갈
+  siteBottomCl5: String #맨흙
+  sbrsCl: String
+  # Etc: EtcInfo
+  trlerAcmpnyAt: String #개인 트레일러 동반 여부(Y:사용, N:미사용)
+  caravAcmpnyAt: String #개인 카라반 동반 여부(Y:사용, N:미사용)
+  animalCmgCl: String #애완동물출입
+}
+
+# #주요시설 값매칭 !0 or
+# type FacilityClass {
+#   gnrlSiteCo: String #일반 야영장
+#   autoSiteCo: String #주요시설 자동차야영장
+#   glampSiteCo: String #주요시설 글램핑
+#   caravSiteCo: String #주요시설 카라반
+#   indvdlCaravSiteCo: String #주요시설 개인 카라반
+# }
+
+# #바닥형태 !0 or
+# type FloorMaterial {
+#   siteBottomCl1: Int #잔디
+#   siteBottomCl2: Int #파쇄석
+#   siteBottomCl3: Int #테크
+#   siteBottomCl4: Int #자갈
+#   siteBottomCl5: Int #맨흙
+# }
+
+# #기타정보 or
+# type EtcInfo {
+#   trlerAcmpnyAt: String #개인 트레일러 동반 여부(Y:사용, N:미사용)
+#   caravAcmpnyAt: String #개인 카라반 동반 여부(Y:사용, N:미사용)
+#   animalCmgCl: String #애완동물출입
+# }
+
+# https://yjh5369.tistory.com/entry/Querydsl-%EB%8F%99%EC%A0%81%EC%9C%BC%EB%A1%9C-where-%EB%A7%8C%EB%93%A4%EA%B8%B0
+# Dynamic query params for search
+# input CampDetailSearchParams {
+#   doNm #도 값매칭 or
+#   #AND
+#   sigunguNm #시 값매칭 or
+#   #AND
+#   themaEnvrnCl #테마 값매칭 or
+#   #AND
+#   facltDivNm #운영형태 값매칭 or
+#   #AND
+#   lctCl #입지구분 값매칭 or
+#   #AND
+#   #주요시설 값매칭 !0 or
+#   {
+#     gnrlSiteCo #일반 야영장
+#     autoSiteCo	#주요시설 자동차야영장
+#     glampSiteCo	#주요시설 글램핑
+#     caravSiteCo	#주요시설 카라반
+#     indvdlCaravSiteCo	#주요시설 개인 카라반
+#   }
+#   #AND
+#   #바닥형태 !0 or
+#   {
+#     siteBottomCl1	#잔디
+#     siteBottomCl2	#파쇄석
+#     siteBottomCl3	#테크
+#     siteBottomCl4	#자갈
+#     siteBottomCl5	#맨흙
+#   }
+#   #AND
+#   sbrsCl #부대시설
+#   # https://www.baeldung.com/string-contains-multiple-words
+#   #AND
+#   #기타정보 or
+#   {
+#     trlerAcmpnyAt	#개인 트레일러 동반 여부(Y:사용, N:미사용)
+#     caravAcmpnyAt	#개인 카라반 동반 여부(Y:사용, N:미사용)
+#     animalCmgCl #애완동물출입
+#   }
+# }

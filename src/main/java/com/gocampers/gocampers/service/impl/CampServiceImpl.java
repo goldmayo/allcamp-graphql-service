@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gocampers.gocampers.config.ApiKey;
+import com.gocampers.gocampers.domain.dto.CampSearchParamsDto;
 import com.gocampers.gocampers.domain.entity.CampInfo;
 import com.gocampers.gocampers.repository.CampInfoRepository;
 import com.gocampers.gocampers.service.CampService;
@@ -37,7 +38,7 @@ public class CampServiceImpl implements CampService {
     private final static String BASE_URL = "http://api.visitkorea.or.kr/openapi/service/rest/GoCamping";
     private final Logger LOGGER = LoggerFactory.getLogger(CampServiceImpl.class);
     private final ApiKey API_KEY = ApiKey.getApiKey();
-    
+
     @Autowired
     private CampInfoRepository campRepository;
     
@@ -123,4 +124,15 @@ public class CampServiceImpl implements CampService {
         return getCampInfoAfter(cursorUtil.decode(after));
     }
 
+    // @Override
+    // public Connection<CampInfo> searchCamps(@Argument int first,@Argument String after, @Argument CampSearchParamsDto params ){
+        
+    // }
+    
+        // private Iterable<CampInfo> searchCamp(){
+        //     BooleanBuilder builder = new BooleanBuilder();
+
+
+        //     return null;
+        // }
 }

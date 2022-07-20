@@ -40,11 +40,4 @@ public class CampGraphqlController {
             return campServiceImpl.allCamps(first, after);
         }
 
-        //https://velog.io/@aidenshin/Querydsl-%EB%8F%99%EC%A0%81-%EC%BF%BC%EB%A6%AC
-        // private Iterable<CampInfo> searchCamp(){
-        //     BooleanBuilder builder = new BooleanBuilder();
-
-
-        //     return null;
-        // }
 }

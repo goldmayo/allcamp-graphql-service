@@ -5,7 +5,6 @@ import javax.persistence.Id;
 
 import lombok.Data;
 
-// @Entity(name="camp_info")
 @Entity
 @Data
 public class CampInfo {

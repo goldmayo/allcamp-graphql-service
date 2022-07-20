@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.graphql.data.method.annotation.Argument;
 
+import com.gocampers.gocampers.domain.dto.CampSearchParamsDto;
 import com.gocampers.gocampers.domain.entity.CampInfo;
 
 import graphql.relay.Connection;
@@ -21,4 +22,7 @@ public interface CampService {
     public Connection<CampInfo> allCamps(@Argument int first,@Argument String after);
     
     public List<CampInfo> getAllCampInfo(String after);
+
+    // public Connection<CampInfo> searchCamps(@Argument int first,@Argument String after, @Argument CampSearchParamsDto params );
+
 }
