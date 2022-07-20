@@ -3,7 +3,6 @@ package com.gocampers.gocampers.controllers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
@@ -11,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gocampers.gocampers.domain.dto.CampSearchParamsDto;
 import com.gocampers.gocampers.domain.entity.CampInfo;
-import com.gocampers.gocampers.repository.CampInfoRepository;
 import com.gocampers.gocampers.service.impl.CampServiceImpl;
 
 import graphql.relay.Connection;
@@ -44,8 +42,6 @@ public class CampGraphqlController {
         public Connection<CampInfo> searchCamps(@Argument int first, @Argument String after, @Argument CampSearchParamsDto params){
             LOGGER.info("params {}",params);
             return campServiceImpl.searchCamps(first, after, params);
-            // return campServiceImpl.allCamps(first, after);
-
         }
 
 }
