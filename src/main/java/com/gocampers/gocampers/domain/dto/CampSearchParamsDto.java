@@ -1,13 +1,12 @@
 package com.gocampers.gocampers.domain.dto;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 
-@Builder
-@Getter
-@RequiredArgsConstructor
+@Data
 public class CampSearchParamsDto {
     private final String facltNm;
     private final String doNm;

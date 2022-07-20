@@ -124,15 +124,28 @@ public class CampServiceImpl implements CampService {
         return getCampInfoAfter(cursorUtil.decode(after));
     }
 
-    // @Override
-    // public Connection<CampInfo> searchCamps(@Argument int first,@Argument String after, @Argument CampSearchParamsDto params ){
-        
-    // }
+    @Override
+    public List<CampInfo> getAllCamps(int first, String after, CampSearchParamsDto params){
+        return after == null
+                ? campRepository.searchCamps(first, params)
+                : campRepository.searchCampsAfterCursor(first, cursorUtil.decode(after), params);
+    }
     
-        // private Iterable<CampInfo> searchCamp(){
-        //     BooleanBuilder builder = new BooleanBuilder();
+    @Override
+    public Connection<CampInfo> searchCamps(@Argument int first,@Argument String after, @Argument CampSearchParamsDto params ){
+        List<Edge<CampInfo>> edges = getAllCamps(first,after,params)
+        .stream()
+        .map(campInfo -> new DefaultEdge<>(campInfo, cursorUtil.encode(campInfo.getContentId())))
+        .collect(Collectors.toUnmodifiableList());
+        // LOGGER.info("edges : {}", edges);
 
+        var pageInfo = new DefaultPageInfo(
+            cursorUtil.getFristCursorFrom(edges),
+            cursorUtil.getLastCursorFrom(edges),
+            after!= null,
+            edges.size() >= first);
+        
+        return new DefaultConnection<>(edges,pageInfo);
+    }
 
-        //     return null;
-        // }
 }

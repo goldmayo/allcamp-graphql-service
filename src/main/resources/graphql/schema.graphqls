@@ -11,7 +11,7 @@ type Query {
   # Return CampInfo by contentId
   findCampById(contentId: Int): CampInfo
   #
-  campSearch(first: Int!, after: String, params: CampSearchParams): CampInfoConnection
+  searchCamps(first: Int!, after: String, params: CampSearchParamsDto): CampInfoConnection
 }
 
 # Relay Pagination type
@@ -117,7 +117,7 @@ type CampInfo {
   tourEraCl: String
 }
 
-input CampSearchParams {
+input CampSearchParamsDto {
   facltNm: String
   doNm: String
   sigunguNm: String
@@ -125,7 +125,11 @@ input CampSearchParams {
   facltDivNm: String
   lctCl: String
   # facility: FacilityClass
-  induty: String
+  gnrlSiteCo: String #일반 야영장
+  autoSiteCo: String #주요시설 자동차야영장
+  glampSiteCo: String #주요시설 글램핑
+  caravSiteCo: String #주요시설 카라반
+  indvdlCaravSiteCo: String #주요시설 개인 카라반
   # floor: floorMaterial
   siteBottomCl1: String #잔디
   siteBottomCl2: String #파쇄석

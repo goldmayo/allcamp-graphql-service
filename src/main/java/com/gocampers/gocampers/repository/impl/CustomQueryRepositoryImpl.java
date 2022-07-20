@@ -3,7 +3,7 @@ package com.gocampers.gocampers.repository.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+// import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import com.gocampers.gocampers.domain.dto.CampSearchParamsDto;
@@ -22,15 +22,19 @@ public class CustomQueryRepositoryImpl implements CustomQueryRepository{
     private final QCampInfo qCampInfo = QCampInfo.campInfo;
     
     @Override
-    public List<CampInfo> searchCamps(int first, String after, CampSearchParamsDto params){
+    public List<CampInfo> searchCamps(int first, CampSearchParamsDto params){
         return getCampInfoByCondition(params).limit(first).fetch();
     }
-    // after => greater than id
-    // orderOption => orderby
+
     @Override
-    public List<CampInfo> searchCamps(int first, String after, CampSearchParamsDto params, Sort orderOption){
-        return getCampInfoByCondition(params).limit(first).fetch();
+    public List<CampInfo> searchCampsAfterCursor(int first, int after, CampSearchParamsDto params){
+        return getCampInfoByCondition(params).offset(after).limit(first).fetch();
     }
+
+    // @Override
+    // public List<CampInfo> searchCampsAfterCursor(int first, int after, CampSearchParamsDto params, Sort orderOption){
+    //     return getCampInfoByCondition(params).limit(first).fetch();
+    // }
 
     private JPAQuery<CampInfo> getCampInfoByCondition(CampSearchParamsDto params) {
         String[] siteBottom = {params.getSiteBottomCl1(),params.getSiteBottomCl2(),params.getSiteBottomCl3(),params.getSiteBottomCl4(),params.getSiteBottomCl5()};
@@ -44,12 +48,13 @@ public class CustomQueryRepositoryImpl implements CustomQueryRepository{
                 inThemaEnvrnCl(params.getThemaEnvrnCl()),
                 inLctCl(params.getLctCl()),
                 inInduty(params.getInduty()),
-                neSiteBottomCl(siteBottom),
+                neSiteBottomCl(siteBottom),                
                 containsSbrsCl(params.getSbrsCl()),
                 eqTrlerAcmpnyAt(params.getTrlerAcmpnyAt()),
                 eqCaravAcmpnyAt(params.getCaravAcmpnyAt()),
                 containsAnimalCmgCl(params.getAnimalCmgCl())
-            );
+            )
+            .orderBy(qCampInfo.contentId.desc());
     }
 
     private BooleanExpression containsFacltNm(String facltNm){

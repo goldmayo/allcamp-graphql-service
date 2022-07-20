@@ -23,6 +23,8 @@ public interface CampService {
     
     public List<CampInfo> getAllCampInfo(String after);
 
-    // public Connection<CampInfo> searchCamps(@Argument int first,@Argument String after, @Argument CampSearchParamsDto params );
+    public List<CampInfo> getAllCamps(int first, String after, CampSearchParamsDto params);
+
+    public Connection<CampInfo> searchCamps(@Argument int first,@Argument String after, @Argument CampSearchParamsDto params );
 
 }
