@@ -4,20 +4,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gocampers.gocampers.service.CampService;
+import com.gocampers.gocampers.service.CampInfoFetchService;
+
 
 @RestController
 @RequestMapping("/api")
 public class CampController {
     
-    private final CampService campService;
-
-    public CampController(CampService campService){
-        this.campService = campService;
+    private final CampInfoFetchService campInfoFetchService;
+    public CampController(CampInfoFetchService campInfoFetchService){
+        this.campInfoFetchService = campInfoFetchService;
     }
 
     @GetMapping("/basic")
     public void getBasicCamp() {
-        campService.getBasicCamp();
+        campInfoFetchService.getBasicCamp();
     }
 }

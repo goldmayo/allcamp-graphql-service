@@ -4,7 +4,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.gocampers.gocampers.service.impl.CampServiceImpl;
+import com.gocampers.gocampers.service.CampInfoFetchService;
 
 import java.time.LocalTime;
 
@@ -14,11 +14,11 @@ import org.slf4j.LoggerFactory;
 @Component
 public class CampInfoFetchScheduler {
 
-    private final CampServiceImpl campServiceImpl;
-    private final Logger LOGGER = LoggerFactory.getLogger(CampServiceImpl.class);
+    private final CampInfoFetchService campInfoFetchService;
+    private final Logger LOGGER = LoggerFactory.getLogger(CampInfoFetchScheduler.class);
     
-    public CampInfoFetchScheduler(CampServiceImpl campServiceImpl){
-        this.campServiceImpl = campServiceImpl;
+    public CampInfoFetchScheduler(CampInfoFetchService campInfoFetchService){
+        this.campInfoFetchService = campInfoFetchService;
     }
     
     @Async
@@ -26,6 +26,6 @@ public class CampInfoFetchScheduler {
     public void fetchCampInfo(){
         LOGGER.info("getBasicCamp time  : "+LocalTime.now());
         LOGGER.info("getBasicCamp thread: "+Thread.currentThread().getName());
-        campServiceImpl.getBasicCamp();
+        campInfoFetchService.getBasicCamp();
     }
 }

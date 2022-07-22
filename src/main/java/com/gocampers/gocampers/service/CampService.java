@@ -11,7 +11,7 @@ import com.gocampers.gocampers.domain.entity.CampInfo;
 import graphql.relay.Connection;
 
 public interface CampService {
-    public void getBasicCamp();
+    // public void getBasicCamp();
 
     public List<CampInfo> getCampInfoAfter(int id);
 
