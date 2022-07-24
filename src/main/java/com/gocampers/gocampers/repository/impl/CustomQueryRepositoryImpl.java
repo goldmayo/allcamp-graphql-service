@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.gocampers.gocampers.domain.dto.CampSearchParamsDto;
 import com.gocampers.gocampers.domain.entity.CampInfo;
 import com.gocampers.gocampers.domain.entity.QCampInfo;
+import com.gocampers.gocampers.domain.paging.ConnectionQuery;
 import com.gocampers.gocampers.repository.CustomQueryRepository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -21,6 +22,22 @@ public class CustomQueryRepositoryImpl implements CustomQueryRepository{
     private  JPAQueryFactory jpaQueryFactory;
     private final QCampInfo qCampInfo = QCampInfo.campInfo;
     
+    @Override
+    public ConnectionQuery<CampInfo> searchCampsQuery(int first, CampSearchParamsDto params){
+        JPAQuery<CampInfo> results = getCampInfoByCondition(params);
+        int totalCount = results.fetch().size();
+        List<CampInfo> queryResults = results.limit(first).fetch();
+        return new ConnectionQuery<CampInfo>(totalCount,queryResults);
+    }
+
+    @Override
+    public ConnectionQuery<CampInfo> searchCampsQueryAfterCursor(int first, int after, CampSearchParamsDto params){
+        JPAQuery<CampInfo> results = getCampInfoByCondition(params);
+        int totalCount = results.fetch().size();
+        List<CampInfo> queryResults = results.offset(after).limit(first).fetch();
+        return new ConnectionQuery<CampInfo>(totalCount,queryResults);
+    }
+
     @Override
     public List<CampInfo> searchCamps(int first, CampSearchParamsDto params){
         return getCampInfoByCondition(params).limit(first).fetch();

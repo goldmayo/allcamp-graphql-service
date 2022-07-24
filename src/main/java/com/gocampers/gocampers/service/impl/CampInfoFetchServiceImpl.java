@@ -27,8 +27,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CampInfoFetchServiceImpl implements CampInfoFetchService {
-    private final static ApiKey API_KEY = ApiKey.getApiKey();
-    private final static BasicApiPath BASE_URL = BasicApiPath.getBasicApiPath();
+    private final ApiKey API_KEY;
+    private final BasicApiPath BASE_URL;
     
     private final Logger LOGGER = LoggerFactory.getLogger(CampInfoFetchServiceImpl.class);
 
@@ -37,9 +37,9 @@ public class CampInfoFetchServiceImpl implements CampInfoFetchService {
     
     @Override
     public List<CampInfo> fetchCampInfo(){
-        URI uri  = UriComponentsBuilder.fromUriString(BASE_URL.toString())
+        URI uri  = UriComponentsBuilder.fromUriString(BASE_URL.getPath())
 			.path("/basedList")
-			.queryParam("ServiceKey",API_KEY)
+			.queryParam("ServiceKey",API_KEY.getKey())
 			.queryParam("MobileOS","ETC")
 			.queryParam("numOfRows","3048")
 			.queryParam("MobileApp","AppTest")
@@ -47,7 +47,8 @@ public class CampInfoFetchServiceImpl implements CampInfoFetchService {
             .build(true)
             .encode(StandardCharsets.UTF_8)
             .toUri();
-        LOGGER.info("start fetching...");
+        LOGGER.info("uri : {}", uri);
+        LOGGER.info("Data fetching start.");
         RestTemplate restTemplate = new RestTemplate();
         String responseEntity = restTemplate.getForObject(uri, String.class);
         ObjectMapper objectmapper =  new ObjectMapper();
@@ -59,17 +60,22 @@ public class CampInfoFetchServiceImpl implements CampInfoFetchService {
             JsonNode itemsRoot = bodyRoot.get("items");
             JsonNode item = itemsRoot.get("item");
             listCampInfo = objectmapper.readValue(item.toString(), new TypeReference<List<CampInfo>>(){});            
+            LOGGER.info("Data fetching succeded.");
         } catch (Exception e) {
-            LOGGER.warn(e.toString());
+            LOGGER.warn("Data fetching failed : {}",e.toString());
         }
-        LOGGER.info("finish fetching.");
+        LOGGER.info("Data fetching finished.");
         return listCampInfo;
     }
    
     @Override
-    public void getBasicCamp() {
-        List<CampInfo> CampInfoList = fetchCampInfo();
-        campRepository.saveAll(CampInfoList);
+    public boolean getBasicCamp() {
+        List<CampInfo> campInfoList = fetchCampInfo();
+        if(!campInfoList.isEmpty()){
+            campRepository.saveAll(campInfoList);
+            return true;
+        }
+        return false;
     }
 
 }

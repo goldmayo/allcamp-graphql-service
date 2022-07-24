@@ -4,18 +4,15 @@ schema {
 }
 
 type Query {
-  # Return all page limited by page & size
-  allCampPaged(page: Int, size: Int): [CampInfo]
-  # Return all cursor based relay page
-  allCamps(first: Int!, after: String): CampInfoConnection
   # Return CampInfo by contentId
   findCampById(contentId: Int): CampInfo
-  #
+  # Return Relay Connection
   searchCamps(first: Int!, after: String, params: CampSearchParamsDto): CampInfoConnection
 }
 
 # Relay Pagination type
 type CampInfoConnection {
+  totalCounts: Int
   edges: [CampInfoEdge]
   pageInfo: PageInfo
 }

@@ -8,5 +8,5 @@ public interface CampInfoFetchService {
 
     public List<CampInfo> fetchCampInfo();
 
-    public void getBasicCamp();
+    public boolean getBasicCamp();
 }
