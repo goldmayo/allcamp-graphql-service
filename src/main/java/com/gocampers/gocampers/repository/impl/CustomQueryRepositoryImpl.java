@@ -38,21 +38,6 @@ public class CustomQueryRepositoryImpl implements CustomQueryRepository{
         return new ConnectionQuery<CampInfo>(totalCount,queryResults);
     }
 
-    @Override
-    public List<CampInfo> searchCamps(int first, CampSearchParamsDto params){
-        return getCampInfoByCondition(params).limit(first).fetch();
-    }
-
-    @Override
-    public List<CampInfo> searchCampsAfterCursor(int first, int after, CampSearchParamsDto params){
-        return getCampInfoByCondition(params).offset(after).limit(first).fetch();
-    }
-
-    // @Override
-    // public List<CampInfo> searchCampsAfterCursor(int first, int after, CampSearchParamsDto params, Sort orderOption){
-    //     return getCampInfoByCondition(params).limit(first).fetch();
-    // }
-
     private JPAQuery<CampInfo> getCampInfoByCondition(CampSearchParamsDto params) {
         String[] siteBottom = {params.getSiteBottomCl1(),params.getSiteBottomCl2(),params.getSiteBottomCl3(),params.getSiteBottomCl4(),params.getSiteBottomCl5()};
         return jpaQueryFactory
