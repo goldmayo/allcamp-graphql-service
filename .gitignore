@@ -36,4 +36,5 @@ build/
 # src/main/resources/application-API_KEY.properties
 # src/main/resources/application-DB.properties
 application-API-KEY.properties
+application-API-PATH.properties
 application-DB.properties
