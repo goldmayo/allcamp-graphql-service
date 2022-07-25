@@ -1,6 +1,10 @@
 package com.gocampers.gocampers.repository.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+
+// import org.slf4j.Logger;
+// import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.data.domain.Sort;
@@ -21,6 +25,7 @@ public class CustomQueryRepositoryImpl implements CustomQueryRepository{
     @Autowired
     private  JPAQueryFactory jpaQueryFactory;
     private final QCampInfo qCampInfo = QCampInfo.campInfo;
+    // private final Logger LOGGER = LoggerFactory.getLogger(CustomQueryRepositoryImpl.class);
     
     @Override
     public ConnectionQuery<CampInfo> searchCampsQuery(int first, CampSearchParamsDto params){
@@ -39,7 +44,14 @@ public class CustomQueryRepositoryImpl implements CustomQueryRepository{
     }
 
     private JPAQuery<CampInfo> getCampInfoByCondition(CampSearchParamsDto params) {
-        String[] siteBottom = {params.getSiteBottomCl1(),params.getSiteBottomCl2(),params.getSiteBottomCl3(),params.getSiteBottomCl4(),params.getSiteBottomCl5()};
+        ArrayList<String> siteBottoms = new ArrayList<>();
+        if(params != null){
+            siteBottoms.add(params.getSiteBottomCl1());
+            siteBottoms.add(params.getSiteBottomCl2());
+            siteBottoms.add(params.getSiteBottomCl3());
+            siteBottoms.add(params.getSiteBottomCl4());
+            siteBottoms.add(params.getSiteBottomCl5());
+        }
         return jpaQueryFactory
             .selectFrom(qCampInfo)
             .where(
@@ -49,8 +61,8 @@ public class CustomQueryRepositoryImpl implements CustomQueryRepository{
                 inFacltDivNm(params.getFacltDivNm()),
                 inThemaEnvrnCl(params.getThemaEnvrnCl()),
                 inLctCl(params.getLctCl()),
-                inInduty(params.getInduty()),
-                neSiteBottomCl(siteBottom),                
+                inInduty(params.getInduty()),             
+                neSiteBottomCl(siteBottoms),                
                 containsSbrsCl(params.getSbrsCl()),
                 eqTrlerAcmpnyAt(params.getTrlerAcmpnyAt()),
                 eqCaravAcmpnyAt(params.getCaravAcmpnyAt()),
@@ -97,14 +109,13 @@ public class CustomQueryRepositoryImpl implements CustomQueryRepository{
     private BooleanExpression neSiteBottomCl5(String siteBottomCl5){
         return siteBottomCl5 == null ? null : qCampInfo.siteBottomCl5.ne(0);
     }
-
-    private BooleanExpression neSiteBottomCl(String[] siteBottomCl){
+    private BooleanExpression neSiteBottomCl(ArrayList<String> siteBottomCl){
         return siteBottomCl == null ? null : Expressions.anyOf(
-            neSiteBottomCl1(siteBottomCl[0]),
-            neSiteBottomCl2(siteBottomCl[1]),
-            neSiteBottomCl3(siteBottomCl[2]),
-            neSiteBottomCl4(siteBottomCl[3]),
-            neSiteBottomCl5(siteBottomCl[4])
+            neSiteBottomCl1(siteBottomCl.get(0)),
+            neSiteBottomCl2(siteBottomCl.get(1)),
+            neSiteBottomCl3(siteBottomCl.get(2)),
+            neSiteBottomCl4(siteBottomCl.get(3)),
+            neSiteBottomCl5(siteBottomCl.get(4))
         );
     }
     private BooleanExpression containsSbrsCl(String sbrsCl){
