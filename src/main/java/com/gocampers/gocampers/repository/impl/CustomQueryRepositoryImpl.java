@@ -7,7 +7,6 @@ import java.util.List;
 // import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import com.gocampers.gocampers.domain.dto.CampSearchParamsDto;
@@ -28,22 +27,40 @@ public class CustomQueryRepositoryImpl implements CustomQueryRepository{
     // private final Logger LOGGER = LoggerFactory.getLogger(CustomQueryRepositoryImpl.class);
     
     @Override
-    public ConnectionQuery<CampInfo> searchCampsQuery(int first, CampSearchParamsDto params){
-        JPAQuery<CampInfo> results = getCampInfoByCondition(params);
+    public ConnectionQuery<CampInfo> searchCampsQueryForward(int first, CampSearchParamsDto params){
+        JPAQuery<CampInfo> results = getCampInfoByCondition(params,true);
         int totalCount = results.fetch().size();
         List<CampInfo> queryResults = results.limit(first).fetch();
+        return new ConnectionQuery<CampInfo>(totalCount,queryResults);
+    }
+    @Override
+    public ConnectionQuery<CampInfo> searchCampsQueryBackward(int last, CampSearchParamsDto params){
+        JPAQuery<CampInfo> results = getCampInfoByCondition(params,false);
+        int totalCount = results.fetch().size();
+        List<CampInfo> queryResults = results.limit(last).fetch();
+        // LOGGER.info("backward queryResults : {}", queryResults);
         return new ConnectionQuery<CampInfo>(totalCount,queryResults);
     }
 
     @Override
     public ConnectionQuery<CampInfo> searchCampsQueryAfterCursor(int first, int after, CampSearchParamsDto params){
-        JPAQuery<CampInfo> results = getCampInfoByCondition(params);
+        JPAQuery<CampInfo> results = getCampInfoByConditionCursor(params,after,true);
         int totalCount = results.fetch().size();
-        List<CampInfo> queryResults = results.offset(after).limit(first).fetch();
+        List<CampInfo> queryResults = results.limit(first).fetch();
         return new ConnectionQuery<CampInfo>(totalCount,queryResults);
     }
 
-    private JPAQuery<CampInfo> getCampInfoByCondition(CampSearchParamsDto params) {
+    public ConnectionQuery<CampInfo> searchCampsQueryBeforeCursor(int last, int before, CampSearchParamsDto params){
+        JPAQuery<CampInfo> results = getCampInfoByConditionCursor(params,before,false);
+        int totalCount = results.fetch().size();
+        List<CampInfo> queryResults = results.limit(last).fetch();
+        // LOGGER.info("before queryResults : {}", queryResults);
+        return new ConnectionQuery<CampInfo>(totalCount,queryResults);
+       
+    }
+
+    private JPAQuery<CampInfo> getCampInfoByCondition(CampSearchParamsDto params, boolean descending) {
+
         ArrayList<String> siteBottoms = new ArrayList<>();
         if(params != null){
             siteBottoms.add(params.getSiteBottomCl1());
@@ -69,8 +86,45 @@ public class CustomQueryRepositoryImpl implements CustomQueryRepository{
                 containsAnimalCmgCl(params.getAnimalCmgCl())
             )
             .orderBy(qCampInfo.contentId.desc());
+            // .orderBy(qCampInfo.createdtime.desc());
     }
 
+    private JPAQuery<CampInfo> getCampInfoByConditionCursor(CampSearchParamsDto params,int cursor, boolean forward) {
+            ArrayList<String> siteBottoms = new ArrayList<>();
+            if(params != null){
+                siteBottoms.add(params.getSiteBottomCl1());
+                siteBottoms.add(params.getSiteBottomCl2());
+                siteBottoms.add(params.getSiteBottomCl3());
+                siteBottoms.add(params.getSiteBottomCl4());
+                siteBottoms.add(params.getSiteBottomCl5());
+            }
+            return jpaQueryFactory
+                .selectFrom(qCampInfo)
+                .where(
+                    forward ? lowerThanContentId(cursor) : greaterThanContentId(cursor),
+                    containsFacltNm(params.getFacltNm()),
+                    inDoNm(params.getDoNm()),
+                    eqSigunguNm(params.getSigunguNm()),
+                    inFacltDivNm(params.getFacltDivNm()),
+                    inThemaEnvrnCl(params.getThemaEnvrnCl()),
+                    inLctCl(params.getLctCl()),
+                    inInduty(params.getInduty()),             
+                    neSiteBottomCl(siteBottoms),                
+                    containsSbrsCl(params.getSbrsCl()),
+                    eqTrlerAcmpnyAt(params.getTrlerAcmpnyAt()),
+                    eqCaravAcmpnyAt(params.getCaravAcmpnyAt()),
+                    containsAnimalCmgCl(params.getAnimalCmgCl())
+                )
+                .orderBy(qCampInfo.contentId.desc());
+                // .orderBy(qCampInfo.createdtime.desc());
+    }
+
+    private BooleanExpression greaterThanContentId(int contentId){
+        return qCampInfo.contentId.gt(contentId);
+    }
+    private BooleanExpression lowerThanContentId(int contentId){
+        return qCampInfo.contentId.lt(contentId);
+    }
     private BooleanExpression containsFacltNm(String facltNm){
         return facltNm == null ? null : qCampInfo.facltNm.contains(facltNm);
     }
@@ -110,7 +164,7 @@ public class CustomQueryRepositoryImpl implements CustomQueryRepository{
         return siteBottomCl5 == null ? null : qCampInfo.siteBottomCl5.ne(0);
     }
     private BooleanExpression neSiteBottomCl(ArrayList<String> siteBottomCl){
-        return siteBottomCl == null ? null : Expressions.anyOf(
+        return siteBottomCl == null ? null : Expressions.allOf(
             neSiteBottomCl1(siteBottomCl.get(0)),
             neSiteBottomCl2(siteBottomCl.get(1)),
             neSiteBottomCl3(siteBottomCl.get(2)),
@@ -128,6 +182,7 @@ public class CustomQueryRepositoryImpl implements CustomQueryRepository{
         return caravAcmpnyAt == null ? null : qCampInfo.caravAcmpnyAt.eq("Y");
     }
     private BooleanExpression containsAnimalCmgCl(String animalCmgCl){
-        return animalCmgCl == null ? null : qCampInfo.animalCmgCl.contains("가능");
+        // return animalCmgCl == null ? null : qCampInfo.animalCmgCl.contains("가능");
+        return animalCmgCl == null ? null : qCampInfo.animalCmgCl.startsWith("불").not();
     }
 }

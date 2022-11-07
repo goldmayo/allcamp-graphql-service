@@ -10,7 +10,9 @@ import graphql.relay.Connection;
 
 public interface CampService {
     public CampInfo findCampById(@Argument int contentId);
-    public ConnectionQuery<CampInfo> getAllCamps(int first, String after, CampSearchParamsDto params);
-    public Connection<CampInfo> searchCamps(@Argument int first,@Argument String after, @Argument CampSearchParamsDto params );
+    public ConnectionQuery<CampInfo> getForwardAllCamps(int first, String after, CampSearchParamsDto params);
+    public Connection<CampInfo> searchForwardCamps(@Argument int first,@Argument String after, @Argument CampSearchParamsDto params );
+    public ConnectionQuery<CampInfo> getBackwardAllCamps(int last, String before, CampSearchParamsDto params);
+    public Connection<CampInfo> searchBackwardCamps(@Argument int last,@Argument String before, @Argument CampSearchParamsDto params );
 
 }

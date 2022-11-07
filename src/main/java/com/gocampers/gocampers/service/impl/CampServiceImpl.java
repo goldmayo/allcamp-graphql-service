@@ -3,8 +3,8 @@ package com.gocampers.gocampers.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// import org.slf4j.Logger;
-// import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CampServiceImpl implements CampService {
-    // private final Logger LOGGER = LoggerFactory.getLogger(CampServiceImpl.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(CampServiceImpl.class);
 
     @Autowired
     private CampInfoRepository campRepository;
@@ -39,15 +39,25 @@ public class CampServiceImpl implements CampService {
     }
 
     @Override
-    public ConnectionQuery<CampInfo> getAllCamps(int first, String after, CampSearchParamsDto params){
+    public ConnectionQuery<CampInfo> getForwardAllCamps(int first, String after, CampSearchParamsDto params){
+        if(after != null){
+            LOGGER.info("getForwardAllCamps cursor decode {}",cursorUtil.decode(after));
+            cursorUtil.decode(after);
+        }
         return after == null
-                ? campRepository.searchCampsQuery(first, params)
+                ? campRepository.searchCampsQueryForward(first, params)
                 : campRepository.searchCampsQueryAfterCursor(first, cursorUtil.decode(after), params);
+    }
+    @Override
+    public ConnectionQuery<CampInfo> getBackwardAllCamps(int last, String before, CampSearchParamsDto params){
+        return before == null
+                ? campRepository.searchCampsQueryBackward(last, params)
+                : campRepository.searchCampsQueryBeforeCursor(last, cursorUtil.decode(before), params);
     }
 
     @Override
-    public Connection<CampInfo> searchCamps(@Argument int first,@Argument String after, @Argument CampSearchParamsDto params ){
-        ConnectionQuery<CampInfo> result = getAllCamps(first, after, params);
+    public Connection<CampInfo> searchForwardCamps(@Argument int first,@Argument String after, @Argument CampSearchParamsDto params ){
+        ConnectionQuery<CampInfo> result = getForwardAllCamps(first, after, params);
         List<CampInfo> edgeChunk = result.getQueryResults();
         int totalCounts = result.getTotalCounts();
         List<Edge<CampInfo>> edges = edgeChunk
@@ -61,6 +71,25 @@ public class CampServiceImpl implements CampService {
             cursorUtil.getLastCursorFrom(edges),
             after!= null,
             edges.size() >= first);
+        return new CampConnectionImpl<>(totalCounts, edges, pageInfo);
+    }
+
+    @Override
+    public Connection<CampInfo> searchBackwardCamps(@Argument int last,@Argument String before, @Argument CampSearchParamsDto params ){
+        ConnectionQuery<CampInfo> result = getBackwardAllCamps(last, before, params);
+        List<CampInfo> edgeChunk = result.getQueryResults();
+        int totalCounts = result.getTotalCounts();
+        List<Edge<CampInfo>> edges = edgeChunk
+        .stream()
+        .map(campInfo -> new DefaultEdge<>(campInfo, cursorUtil.encode(campInfo.getContentId())))
+        .collect(Collectors.toUnmodifiableList());
+        // LOGGER.info("edges : {}", edges);
+
+        var pageInfo = new DefaultPageInfo(
+            cursorUtil.getFristCursorFrom(edges),
+            cursorUtil.getLastCursorFrom(edges),
+            edges.size() >= last,
+            before != null);
         return new CampConnectionImpl<>(totalCounts, edges, pageInfo);
     }
 
