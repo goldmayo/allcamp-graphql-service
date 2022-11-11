@@ -3,8 +3,8 @@ package com.gocampers.gocampers.repository.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-// import org.slf4j.Logger;
-// import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -24,13 +24,15 @@ public class CustomQueryRepositoryImpl implements CustomQueryRepository{
     @Autowired
     private  JPAQueryFactory jpaQueryFactory;
     private final QCampInfo qCampInfo = QCampInfo.campInfo;
-    // private final Logger LOGGER = LoggerFactory.getLogger(CustomQueryRepositoryImpl.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(CustomQueryRepositoryImpl.class);
     
     @Override
     public ConnectionQuery<CampInfo> searchCampsQueryForward(int first, CampSearchParamsDto params){
         JPAQuery<CampInfo> results = getCampInfoByCondition(params,true);
         int totalCount = results.fetch().size();
         List<CampInfo> queryResults = results.limit(first).fetch();
+        LOGGER.info("forward queryResults : {}", queryResults);
+
         return new ConnectionQuery<CampInfo>(totalCount,queryResults);
     }
     @Override
@@ -60,15 +62,23 @@ public class CustomQueryRepositoryImpl implements CustomQueryRepository{
     }
 
     private JPAQuery<CampInfo> getCampInfoByCondition(CampSearchParamsDto params, boolean descending) {
+        LOGGER.info("getCampInfoByCondition getFacltNm: {}", params.getFacltNm());
+        LOGGER.info("getCampInfoByCondition getDoNm: {}",params.getDoNm());
+        LOGGER.info("getCampInfoByCondition getSigunguNm: {}",params.getSigunguNm());
+        LOGGER.info("getCampInfoByCondition getFacltDivNm: {}",params.getFacltDivNm());
+        LOGGER.info("getCampInfoByCondition getThemaEnvrnCl: {}",params.getThemaEnvrnCl());
+        LOGGER.info("getCampInfoByCondition getLctCl: {}",params.getLctCl());
+        LOGGER.info("getCampInfoByCondition getInduty: {}",params.getInduty());
+        LOGGER.info("getCampInfoByCondition getSbrsCl: {}",params.getSbrsCl());
+        LOGGER.info("getCampInfoByCondition getTrlerAcmpnyAt: {}",params.getTrlerAcmpnyAt());
+        LOGGER.info("getCampInfoByCondition getCaravAcmpnyAt: {}",params.getCaravAcmpnyAt());
 
         ArrayList<String> siteBottoms = new ArrayList<>();
-        if(params != null){
-            siteBottoms.add(params.getSiteBottomCl1());
-            siteBottoms.add(params.getSiteBottomCl2());
-            siteBottoms.add(params.getSiteBottomCl3());
-            siteBottoms.add(params.getSiteBottomCl4());
-            siteBottoms.add(params.getSiteBottomCl5());
-        }
+        siteBottoms.add(params.getSiteBottomCl1());
+        siteBottoms.add(params.getSiteBottomCl2());
+        siteBottoms.add(params.getSiteBottomCl3());
+        siteBottoms.add(params.getSiteBottomCl4());
+        siteBottoms.add(params.getSiteBottomCl5());
         return jpaQueryFactory
             .selectFrom(qCampInfo)
             .where(
@@ -91,32 +101,30 @@ public class CustomQueryRepositoryImpl implements CustomQueryRepository{
 
     private JPAQuery<CampInfo> getCampInfoByConditionCursor(CampSearchParamsDto params,int cursor, boolean forward) {
             ArrayList<String> siteBottoms = new ArrayList<>();
-            if(params != null){
                 siteBottoms.add(params.getSiteBottomCl1());
                 siteBottoms.add(params.getSiteBottomCl2());
                 siteBottoms.add(params.getSiteBottomCl3());
                 siteBottoms.add(params.getSiteBottomCl4());
                 siteBottoms.add(params.getSiteBottomCl5());
-            }
-            return jpaQueryFactory
-                .selectFrom(qCampInfo)
-                .where(
-                    forward ? lowerThanContentId(cursor) : greaterThanContentId(cursor),
-                    containsFacltNm(params.getFacltNm()),
-                    inDoNm(params.getDoNm()),
-                    eqSigunguNm(params.getSigunguNm()),
-                    inFacltDivNm(params.getFacltDivNm()),
-                    inThemaEnvrnCl(params.getThemaEnvrnCl()),
-                    inLctCl(params.getLctCl()),
-                    inInduty(params.getInduty()),             
-                    neSiteBottomCl(siteBottoms),                
-                    containsSbrsCl(params.getSbrsCl()),
-                    eqTrlerAcmpnyAt(params.getTrlerAcmpnyAt()),
-                    eqCaravAcmpnyAt(params.getCaravAcmpnyAt()),
-                    containsAnimalCmgCl(params.getAnimalCmgCl())
-                )
-                .orderBy(qCampInfo.contentId.desc());
-                // .orderBy(qCampInfo.createdtime.desc());
+                return jpaQueryFactory
+                    .selectFrom(qCampInfo)
+                    .where(
+                        forward ? lowerThanContentId(cursor) : greaterThanContentId(cursor),
+                        containsFacltNm(params.getFacltNm()),
+                        inDoNm(params.getDoNm()),
+                        eqSigunguNm(params.getSigunguNm()),
+                        inFacltDivNm(params.getFacltDivNm()),
+                        inThemaEnvrnCl(params.getThemaEnvrnCl()),
+                        inLctCl(params.getLctCl()),
+                        inInduty(params.getInduty()),             
+                        neSiteBottomCl(siteBottoms),                
+                        containsSbrsCl(params.getSbrsCl()),
+                        eqTrlerAcmpnyAt(params.getTrlerAcmpnyAt()),
+                        eqCaravAcmpnyAt(params.getCaravAcmpnyAt()),
+                        containsAnimalCmgCl(params.getAnimalCmgCl())
+                    )
+                    .orderBy(qCampInfo.contentId.desc());
+                    // .orderBy(qCampInfo.createdtime.desc());
     }
 
     private BooleanExpression greaterThanContentId(int contentId){
