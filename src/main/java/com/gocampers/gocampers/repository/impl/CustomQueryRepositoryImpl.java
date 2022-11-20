@@ -1,6 +1,7 @@
 package com.gocampers.gocampers.repository.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -31,8 +32,6 @@ public class CustomQueryRepositoryImpl implements CustomQueryRepository{
         JPAQuery<CampInfo> results = getCampInfoByCondition(params,true);
         int totalCount = results.fetch().size();
         List<CampInfo> queryResults = results.limit(first).fetch();
-        LOGGER.info("forward queryResults : {}", queryResults);
-
         return new ConnectionQuery<CampInfo>(totalCount,queryResults);
     }
     @Override
@@ -47,32 +46,23 @@ public class CustomQueryRepositoryImpl implements CustomQueryRepository{
     @Override
     public ConnectionQuery<CampInfo> searchCampsQueryAfterCursor(int first, int after, CampSearchParamsDto params){
         JPAQuery<CampInfo> results = getCampInfoByConditionCursor(params,after,true);
-        int totalCount = results.fetch().size();
+        int totalCount = getCampInfoByCondition(params,true).fetch().size();
         List<CampInfo> queryResults = results.limit(first).fetch();
+        // LOGGER.info("forward queryResults : {}", queryResults);
         return new ConnectionQuery<CampInfo>(totalCount,queryResults);
     }
 
     public ConnectionQuery<CampInfo> searchCampsQueryBeforeCursor(int last, int before, CampSearchParamsDto params){
         JPAQuery<CampInfo> results = getCampInfoByConditionCursor(params,before,false);
-        int totalCount = results.fetch().size();
+        int totalCount = getCampInfoByCondition(params,false).fetch().size();
         List<CampInfo> queryResults = results.limit(last).fetch();
+        Collections.sort(queryResults, (c1, c2) ->c2.getContentId()- c1.getContentId());
         // LOGGER.info("before queryResults : {}", queryResults);
         return new ConnectionQuery<CampInfo>(totalCount,queryResults);
        
     }
 
     private JPAQuery<CampInfo> getCampInfoByCondition(CampSearchParamsDto params, boolean descending) {
-        LOGGER.info("getCampInfoByCondition getFacltNm: {}", params.getFacltNm());
-        LOGGER.info("getCampInfoByCondition getDoNm: {}",params.getDoNm());
-        LOGGER.info("getCampInfoByCondition getSigunguNm: {}",params.getSigunguNm());
-        LOGGER.info("getCampInfoByCondition getFacltDivNm: {}",params.getFacltDivNm());
-        LOGGER.info("getCampInfoByCondition getThemaEnvrnCl: {}",params.getThemaEnvrnCl());
-        LOGGER.info("getCampInfoByCondition getLctCl: {}",params.getLctCl());
-        LOGGER.info("getCampInfoByCondition getInduty: {}",params.getInduty());
-        LOGGER.info("getCampInfoByCondition getSbrsCl: {}",params.getSbrsCl());
-        LOGGER.info("getCampInfoByCondition getTrlerAcmpnyAt: {}",params.getTrlerAcmpnyAt());
-        LOGGER.info("getCampInfoByCondition getCaravAcmpnyAt: {}",params.getCaravAcmpnyAt());
-
         ArrayList<String> siteBottoms = new ArrayList<>();
         siteBottoms.add(params.getSiteBottomCl1());
         siteBottoms.add(params.getSiteBottomCl2());
@@ -123,7 +113,9 @@ public class CustomQueryRepositoryImpl implements CustomQueryRepository{
                         eqCaravAcmpnyAt(params.getCaravAcmpnyAt()),
                         containsAnimalCmgCl(params.getAnimalCmgCl())
                     )
-                    .orderBy(qCampInfo.contentId.desc());
+                    .orderBy(forward ? qCampInfo.contentId.desc() : qCampInfo.contentId.asc());
+                    
+                    // .orderBy(qCampInfo.contentId.asc());
                     // .orderBy(qCampInfo.createdtime.desc());
     }
 

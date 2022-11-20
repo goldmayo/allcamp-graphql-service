@@ -14,5 +14,5 @@ public interface CampService {
     public Connection<CampInfo> searchForwardCamps(@Argument int first,@Argument String after, @Argument CampSearchParamsDto params );
     public ConnectionQuery<CampInfo> getBackwardAllCamps(int last, String before, CampSearchParamsDto params);
     public Connection<CampInfo> searchBackwardCamps(@Argument int last,@Argument String before, @Argument CampSearchParamsDto params );
-
+    public Connection<CampInfo> searchCamps(@Argument Integer first,@Argument String after, @Argument Integer last,@Argument String before, @Argument CampSearchParamsDto params );
 }

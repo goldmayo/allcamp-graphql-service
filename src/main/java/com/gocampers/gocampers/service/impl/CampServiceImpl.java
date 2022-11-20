@@ -93,4 +93,21 @@ public class CampServiceImpl implements CampService {
         return new CampConnectionImpl<>(totalCounts, edges, pageInfo);
     }
 
+    @Override
+    public Connection<CampInfo> searchCamps(@Argument Integer first, @Argument String after, @Argument Integer last, @Argument String before, @Argument CampSearchParamsDto params ){
+        if(first != null && last == null){
+            return searchForwardCamps(first,after,params);
+        }
+        else if(last != null && first == null ){
+            return searchBackwardCamps(last,before,params);
+        }
+        else{
+            return new CampConnectionImpl<>(0, null, new DefaultPageInfo(
+                null,
+                null,
+                false,
+                false));
+        }
+        
+    }
 }

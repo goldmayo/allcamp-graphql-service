@@ -7,6 +7,7 @@ type Query {
   # Return CampInfo by contentId
   findCampById(contentId: Int): CampInfo
   # Return Relay Connection
+  searchCamps(first: Int, after: String, last: Int, before: String, params: CampSearchParamsDto): CampInfoConnection
   searchCampsForward(first: Int!, after: String, params: CampSearchParamsDto): CampInfoConnection
   searchCampsBackward(last: Int!, before: String, params: CampSearchParamsDto): CampInfoConnection
 }

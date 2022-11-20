@@ -40,4 +40,12 @@ public class CampGraphqlController {
             LOGGER.info("params {}",params);
             return campServiceImpl.searchBackwardCamps(last, before, params);
         }    
+
+        @QueryMapping
+        public Connection<CampInfo> searchCamps(@Argument Integer first, @Argument String after, @Argument Integer last, @Argument String before, @Argument CampSearchParamsDto params){
+            LOGGER.info("after cursor {}",after);
+            LOGGER.info("before cursor {}",before);
+            LOGGER.info("params {}",params);
+            return campServiceImpl.searchCamps(first,after,last, before, params);
+        }   
 }
