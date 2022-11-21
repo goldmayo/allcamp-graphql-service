@@ -8,10 +8,8 @@ type Query {
   findCampById(contentId: Int): CampInfo
   # Return Relay Connection
   searchCamps(first: Int, after: String, last: Int, before: String, params: CampSearchParamsDto): CampInfoConnection
-  searchCampsForward(first: Int!, after: String, params: CampSearchParamsDto): CampInfoConnection
-  searchCampsBackward(last: Int!, before: String, params: CampSearchParamsDto): CampInfoConnection
 }
-# Relay Pagination type
+
 type CampInfoConnection {
   totalCounts: Int
   edges: [CampInfoEdge]
@@ -30,88 +28,168 @@ type CampInfoEdge {
   cursor: String
 }
 
-# Object type
 type CampInfo {
+  # 콘텐츠 ID
   contentId: Int!
+  # 주소
   addr1: String
+  # 주소상세
   addr2: String
+  # 관광사업자번호
   trsagntNo: String
+  # 전체면적
   allar: Int
+  # 애완동물출입
   animalCmgCl: String
+  # 주요시설 자동차야영장
   autoSiteCo: Int
+  # 사업자번호
   bizrno: String
+  # 화로대
   brazierCl: String
+  # 개인 카라반 동반 여부(Y:사용, N:미사용)
   caravAcmpnyAt: String
+  # 주요시설 카라반
   caravSiteCo: Int
+  # 자체문화행사 여부(Y:사용, N:미사용)
   clturEventAt: String
+  # 등록일
   createdtime: String
+  # 도
   doNm: String
+  # 캠핑장비대여
   eqpmnLendCl: String
+  # 체험프로그램명
   exprnProgrm: String
+  # 체험프로그램 여부(Y:사용, N:미사용)
   exprnProgrmAt: String
+  # 소화기 개수
   extshrCo: Int
+  # 사업주체.구분
   facltDivNm: String
+  # 야영장명
   facltNm: String
+  # 특징
   featureNm: String
+  # fireSensorCo
   fireSensorCo: Int
+  # 대표이미지
   firstImageUrl: String
+  # frprvtSandCo
   frprvtSandCo: Int
+  # 방화수 개수
   frprvtWrppCo: Int
+  # 주요시설 글램핑
   glampSiteCo: Int
+  # 주요시설 일반야영장
   gnrlSiteCo: Int
+  # 홈페이지
   homepage: String
+  # 업종
   induty: String
+  # 주요시설 개인 카라반
   indvdlCaravSiteCo: Int
+  # 영업배상책임보험 가입여부(Y:사용, N:미사용)
   insrncAt: String
+  # 소개
   Intro: String
+  # 입지구분
   lctCl: String
+  # 한줄소개
   lineIntro: String
+  # 상주관리인원
   manageNmpr: Int
+  # 운영상태.관리상태
   manageSttus: String
+  # 운영주체.관리주체 (직영, 위탁)
   mangeDivNm: String
+  # 경도(X)
   mapX: Float
+  # 위도(Y)
   mapY: Float
+  # 운영기관.관리기관
   mgcDiv: String
+  # 수정일
   modifiedtime: String
+  # 운영일
   operDeCl: String
+  # 운영기간
   operPdCl: String
+  # 주변이용가능시설
   posblFcltyCl: String
+  # 주변이용가능시설 기타
   posblFcltyEtc: String
+  # 인허가일자
   prmisnDe: String
+  # 예약 구분
   resveCl: String
+  # 예약 페이지
   resveUrl: String
+  # 부대시설
   sbrsCl: String
+  # 부대시설 기타
   sbrsEtc: String
+  # 시군구
   sigunguNm: String
+  # 잔디
   siteBottomCl1: Int
+  # 파쇄석
   siteBottomCl2: Int
+  # 테크
   siteBottomCl3: Int
+  # 자갈
   siteBottomCl4: Int
+  # 맨흙
   siteBottomCl5: Int
+  # 사이트 크기1 수량
   siteMg1Co: Int
+  # 사이트 크기1 세로
   siteMg1Vrticl: Int
+  # 사이트 크기1 가로
   siteMg1Width: Int
+  # 사이트 크기2 수량
   siteMg2Co: Int
+  # 사이트 크기2 세로
   siteMg2Vrticl: Int
+  # 사이트 크기2 가로
   siteMg2Width: Int
+  # 사이트 크기3 수량
   siteMg3Co: Int
+  # 사이트 크기3 세로
   siteMg3Vrticl: Int
+  # 사이트 크기3 가로
   siteMg3Width: Int
+  # 사이트간 거리
   sitedStnc: Int
+  # 샤워실
   swrmCo: Int
+  # 전화
   tel: String
+  # 테마환경
   themaEnvrnCl: String
+  # 화장실 개수
   toiletCo: Int
+  # 개인 트레일러 동반 여부(Y:사용, N:미사용)
   trlerAcmpnyAt: String
+  # 개수대 개수
   wtrplCo: Int
+  # 우편번호
   zipcode: String
+  # 휴장기간.휴무기간 시작일
   hvofBgnde: String
+  # 휴장기간.휴무기간 종료일
   hvofEnddle: String
+  # 오시는 길 컨텐츠
   direction: String
+  # 툴팁
   tooltip: String
+  # 글램핑 - 내부시설
   glampInnerFclty: String
+  # 카라반 - 내부시설
   caravInnerFclty: String
+  # 자체문화행사명
   clturEvent: String
+  # 여행시기
   tourEraCl: String
 }
 
@@ -122,84 +200,14 @@ input CampSearchParamsDto {
   themaEnvrnCl: String
   facltDivNm: String
   lctCl: String
-  # facility: FacilityClass
   induty: String
-  # floor: floorMaterial
-  siteBottomCl1: String #잔디
-  siteBottomCl2: String #파쇄석
-  siteBottomCl3: String #테크
-  siteBottomCl4: String #자갈
-  siteBottomCl5: String #맨흙
+  siteBottomCl1: String
+  siteBottomCl2: String
+  siteBottomCl3: String
+  siteBottomCl4: String
+  siteBottomCl5: String
   sbrsCl: String
-  # Etc: EtcInfo
-  trlerAcmpnyAt: String #개인 트레일러 동반 여부(Y:사용, N:미사용)
-  caravAcmpnyAt: String #개인 카라반 동반 여부(Y:사용, N:미사용)
-  animalCmgCl: String #애완동물출입
+  trlerAcmpnyAt: String
+  caravAcmpnyAt: String
+  animalCmgCl: String
 }
-
-# #주요시설 값매칭 !0 or
-# type FacilityClass {
-#   gnrlSiteCo: String #일반 야영장
-#   autoSiteCo: String #주요시설 자동차야영장
-#   glampSiteCo: String #주요시설 글램핑
-#   caravSiteCo: String #주요시설 카라반
-#   indvdlCaravSiteCo: String #주요시설 개인 카라반
-# }
-
-# #바닥형태 !0 or
-# type FloorMaterial {
-#   siteBottomCl1: Int #잔디
-#   siteBottomCl2: Int #파쇄석
-#   siteBottomCl3: Int #테크
-#   siteBottomCl4: Int #자갈
-#   siteBottomCl5: Int #맨흙
-# }
-
-# #기타정보 or
-# type EtcInfo {
-#   trlerAcmpnyAt: String #개인 트레일러 동반 여부(Y:사용, N:미사용)
-#   caravAcmpnyAt: String #개인 카라반 동반 여부(Y:사용, N:미사용)
-#   animalCmgCl: String #애완동물출입
-# }
-
-# https://yjh5369.tistory.com/entry/Querydsl-%EB%8F%99%EC%A0%81%EC%9C%BC%EB%A1%9C-where-%EB%A7%8C%EB%93%A4%EA%B8%B0
-# Dynamic query params for search
-# input CampDetailSearchParams {
-#   doNm #도 값매칭 or
-#   #AND
-#   sigunguNm #시 값매칭 or
-#   #AND
-#   themaEnvrnCl #테마 값매칭 or
-#   #AND
-#   facltDivNm #운영형태 값매칭 or
-#   #AND
-#   lctCl #입지구분 값매칭 or
-#   #AND
-#   #주요시설 값매칭 !0 or
-#   {
-#     gnrlSiteCo #일반 야영장
-#     autoSiteCo	#주요시설 자동차야영장
-#     glampSiteCo	#주요시설 글램핑
-#     caravSiteCo	#주요시설 카라반
-#     indvdlCaravSiteCo	#주요시설 개인 카라반
-#   }
-#   #AND
-#   #바닥형태 !0 or
-#   {
-#     siteBottomCl1	#잔디
-#     siteBottomCl2	#파쇄석
-#     siteBottomCl3	#테크
-#     siteBottomCl4	#자갈
-#     siteBottomCl5	#맨흙
-#   }
-#   #AND
-#   sbrsCl #부대시설
-#   # https://www.baeldung.com/string-contains-multiple-words
-#   #AND
-#   #기타정보 or
-#   {
-#     trlerAcmpnyAt	#개인 트레일러 동반 여부(Y:사용, N:미사용)
-#     caravAcmpnyAt	#개인 카라반 동반 여부(Y:사용, N:미사용)
-#     animalCmgCl #애완동물출입
-#   }
-# }

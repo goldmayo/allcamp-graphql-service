@@ -22,7 +22,7 @@ public class CampInfoFetchScheduler {
     }
     
     @Async
-    @Scheduled(cron = "0 0 3 * * ?", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 0 3 * * *", zone = "Asia/Seoul")
     public void fetchCampInfo(){
         LOGGER.info("getBasicCamp time  : "+LocalTime.now());
         LOGGER.info("getBasicCamp thread: "+Thread.currentThread().getName());

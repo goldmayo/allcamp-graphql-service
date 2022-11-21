@@ -3,8 +3,6 @@ package com.gocampers.gocampers.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.stereotype.Service;
@@ -26,8 +24,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CampServiceImpl implements CampService {
-    private final Logger LOGGER = LoggerFactory.getLogger(CampServiceImpl.class);
-
+   
     @Autowired
     private CampInfoRepository campRepository;
     
@@ -41,7 +38,6 @@ public class CampServiceImpl implements CampService {
     @Override
     public ConnectionQuery<CampInfo> getForwardAllCamps(int first, String after, CampSearchParamsDto params){
         if(after != null){
-            LOGGER.info("getForwardAllCamps cursor decode {}",cursorUtil.decode(after));
             cursorUtil.decode(after);
         }
         return after == null
@@ -64,7 +60,6 @@ public class CampServiceImpl implements CampService {
         .stream()
         .map(campInfo -> new DefaultEdge<>(campInfo, cursorUtil.encode(campInfo.getContentId())))
         .collect(Collectors.toUnmodifiableList());
-        // LOGGER.info("edges : {}", edges);
 
         var pageInfo = new DefaultPageInfo(
             cursorUtil.getFristCursorFrom(edges),
@@ -83,7 +78,6 @@ public class CampServiceImpl implements CampService {
         .stream()
         .map(campInfo -> new DefaultEdge<>(campInfo, cursorUtil.encode(campInfo.getContentId())))
         .collect(Collectors.toUnmodifiableList());
-        // LOGGER.info("edges : {}", edges);
 
         var pageInfo = new DefaultPageInfo(
             cursorUtil.getFristCursorFrom(edges),
