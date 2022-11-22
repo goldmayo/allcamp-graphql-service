@@ -84,13 +84,6 @@ variable:{
 
 매일 오전 3시 정각에 한국관광공사 api를 호출하여 DB를 업데이트 합니다.
 
-## 개발 환경 설정
-
-```sh
-make install
-npm test
-```
-
 ## 정보
 
 현승재 - dudtod1596@gmail.com
