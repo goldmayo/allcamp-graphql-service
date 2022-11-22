@@ -14,7 +14,7 @@
 ## 설치 방법
 
 ```sh
-> git clone https://github.com/your_username_/Project-Name.git
+> git clone https://github.com/goldmayo/allcamp-graphql-service.git
 ```
 
 - /resource/application-YOUR-API-KEY.properties
