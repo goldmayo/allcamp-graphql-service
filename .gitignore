@@ -37,3 +37,8 @@ build/
 # src/main/resources/application-DB.properties
 application-API-KEY.properties
 application-DB.properties
+campersbackup20230217.sql
+
+normalization.txt
+gpt_recommend.txt
+gpt-update-sol.txt
